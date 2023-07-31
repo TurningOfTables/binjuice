@@ -1,0 +1,94 @@
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInBottom {
+    0% {
+        transform: translateY(100%)
+    }
+
+    100% {
+        transform: translateY(0)
+    }
+}
+
+@keyframes slideInTop {
+    0% {
+        transform: translateY(-100%)
+    }
+
+    100% {
+        transform: translateY(0)
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-100%)
+    }
+
+    100% {
+        transform: translateX(0)
+    }
+}
+
+@keyframes tiltShake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    2% {
+        transform: rotate(1deg)
+    }
+
+    4% {
+        transform: rotate(0deg)
+    }
+
+    6% {
+        transform: rotate(-1deg)
+    }
+
+    8%,
+    100% {
+        transform: rotate(0deg)
+    }
+
+}
+
+.bin-image {
+    animation: slideInLeft 1s;
+    height: 300px;
+    width: 300px;
+}
+
+.hero {
+    animation: slideInTop 1s
+}
+
+.bin-name {
+    animation: slideInTop 1s
+}
+
+.days-to-collection {
+    animation: tiltShake 5s;
+    animation-delay: 2s;
+    animation-iteration-count: infinite
+}
+
+body {
+    animation: fadeIn 2s
+}
+
+.yesno-image {
+    margin: auto;
+    height: 100px;
+    width: 100px;
+    animation: slideInBottom 1s
+}
