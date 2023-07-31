@@ -10,6 +10,8 @@ Run with `go run main.go binlib.go`
 
 By default binds to the current IP address on port 8000
 
+**Note there is no meaningful password on the SQL database and testing authentication info is currently stored in plain text rather than in an env var or any secure way.**
+
 ## Attributions
 
 [Fiber web framework](https://gofiber.io)
