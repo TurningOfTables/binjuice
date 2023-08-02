@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"net"
 	"time"
 
@@ -29,7 +30,7 @@ func initialiseApp() *fiber.App {
 func handleIndex(c *fiber.Ctx) error {
 	ncData := NextCollectionData()
 	ncDate := NextCollectionDate(time.Now())
-	daysToNc := time.Until(ncDate).Hours() / 24
+	daysToNc := math.Ceil(time.Until(ncDate).Hours() / 24)
 	var daysToNcString string
 	if daysToNc == 0 {
 		daysToNcString = "TODAY"
