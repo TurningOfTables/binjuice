@@ -4,6 +4,8 @@
 
 Uses Go with the Fiber framework and Bootstrap to generate a basic html page showing what bins are next being collected in my area. Contains unnecessary CSS animations.
 
+![Screenshot](readme_screenshot.png)
+
 ## Notes
 
 Run with `go run main.go binlib.go`
