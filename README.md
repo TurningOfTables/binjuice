@@ -12,6 +12,8 @@ Run with `go run main.go binlib.go`
 
 By default binds to the current IP address on port 8000
 
+If you set an env variable of `BIN_JUICE_NTFY_TOPIC` with a [ntfy.sh](https://ntfy.sh) topic then you can get notifications as the bin collection day nears. See the ntfy.sh website for more info.
+
 ## Attributions
 
 [Fiber web framework](https://gofiber.io)
@@ -29,3 +31,5 @@ By default binds to the current IP address on port 8000
 [Red cross icon by Pixel Perfect - Flaticon](https://www.flaticon.com/free-icons/delete)
 
 [Green tick icon by kliriw art - Flaticon](https://www.flaticon.com/free-icons/correct)
+
+[Optional push notifications by ntfy.sh](https://ntfy.sh/)
