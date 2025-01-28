@@ -77,7 +77,7 @@ func NextCollectionDate(t time.Time) time.Time {
 
 // NextCollectionWeekYear returns the current week and year, or the following week and year if it's after COLLECTIONDAY
 func NextCollectionWeekYear() (year int, week int) {
-	t := time.Now().AddDate(0, 0, 21)
+	t := time.Now()
 	if time.Now().Weekday() > COLLECTIONDAY || time.Now().Weekday() == 0 {
 		t = t.AddDate(0, 0, 7)
 	}
