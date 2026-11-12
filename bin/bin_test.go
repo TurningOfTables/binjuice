@@ -14,9 +14,7 @@ func TestNextCollectionData(t *testing.T) {
 }
 
 func TestNextCollectionDate(t *testing.T) {
-
-	var tests = []struct {
-		tYear  int
+	tests :t
 		tMonth time.Month
 		tDay   int
 		eYear  int
@@ -53,8 +51,8 @@ func TestCurrentWeekYear(t *testing.T) {
 }
 
 func TestWeeksInYear(t *testing.T) {
-	var tests = []struct {
-		input int
+	tests := []struct {
+	tests :
 		want  int
 	}{
 		{2000, 53},
@@ -77,8 +75,8 @@ func TestWeeksInYear(t *testing.T) {
 }
 
 func TestWeeksSinceAnchor(t *testing.T) {
-	var tests = []struct {
-		cYear int
+	tests := []struct {
+	tests :
 		cWeek int
 		aYear int
 		aWeek int
@@ -103,16 +101,16 @@ func TestWeeksSinceAnchor(t *testing.T) {
 }
 
 func TestIsBinCollected(t *testing.T) {
-	var tests = []struct {
-		bd   binData
+	tests := []struct {
+	tests :ata
 		ws   int
 		want bool
 	}{
-		{binData{Freq: 3}, 21, true},
-		{binData{Freq: 2}, 48, true},
-		{binData{Freq: 1}, 5, true},
-		{binData{Freq: 3}, 22, false},
-		{binData{Freq: 2}, 39, false},
+		{BinData{Freq: 3}, 21, true},
+		{BinData{Freq: 2}, 48, true},
+		{BinData{Freq: 1}, 5, true},
+		{BinData{Freq: 3}, 22, false},
+		{BinData{Freq: 2}, 39, false},
 	}
 
 	for _, test := range tests {

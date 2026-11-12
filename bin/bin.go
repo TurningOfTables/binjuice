@@ -3,11 +3,15 @@ package bin
 import (
 	"errors"
 	"log"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
+var COLLECTIONDAY time.Weekday
+
 const (
-	COLLECTIONDAY   = time.Thursday
 	WEEKSINYEAR     = 52
 	WEEKSINLEAPYEAR = 53
 	ANCHORYEAR      = 2025
@@ -15,7 +19,7 @@ const (
 	ANCHORDAY       = 16
 )
 
-type binData struct {
+type BinData struct {
 	Name         string
 	FriendlyName string
 	ImagePath    string
@@ -23,17 +27,55 @@ type binData struct {
 	Collected    bool
 }
 
-var bd = []binData{
+var bd = []BinData{
 	{Name: "Food", FriendlyName: "Useless Food", ImagePath: "food_bin.png", Freq: 1},
 	{Name: "Recycling", FriendlyName: "Recycling", ImagePath: "recycling_bin.png", Freq: 2},
 	{Name: "Grey", FriendlyName: "Waste", ImagePath: "grey_bin.png", Freq: 3},
 	{Name: "Green", FriendlyName: "Garden", ImagePath: "green_bin.png", Freq: 2},
 }
 
+func generateBinData() []BinData {
+	numberOfBins, err := strconv.Atoi(os.Getenv("NUMBER_OF_BINS"))
+	if err != nil {
+		log.Println("reverting to default setup due to no custom bin data")
+		return bd
+	}
+
+	if numberOfBins > 0 {
+		var binData []BinData
+
+		for i := 1; i <= int(numberOfBins); i++ {
+			binItemKey := strconv.Itoa(i)
+			binItemData := os.Getenv("BIN_" + binItemKey)
+
+			if binItemData == "" {
+				panic("unable to continue due to no env vars of BIN_" + binItemKey + " set")
+			}
+
+			binItem := strings.Split(binItemData, ",")
+			binFrequency, err := strconv.Atoi(binItem[3])
+			if err != nil {
+				panic("unable to continue as bin frequency is not an integer")
+			}
+
+			binData = append(binData, BinData{
+				Name:         binItem[0],
+				FriendlyName: binItem[1],
+				ImagePath:    binItem[2],
+				Freq:         binFrequency,
+			})
+		}
+
+		return binData
+	}
+
+	return bd
+}
+
 // NextCollectionData iterates through entries in a []binData and appends a Collected: bool to the bin.
 //
-// It returns the updated []binData
-func NextCollectionData() []binData {
+// It returns the updated []BinData
+func NextCollectionData() []BinData {
 	aYear, aWeek, err := AnchorWeekYear()
 	if err != nil {
 		log.Fatalf("Error getting the week and year of the anchor date (%v)", err)
@@ -46,11 +88,13 @@ func NextCollectionData() []binData {
 		log.Fatal("error getting the weeks since the anchor date")
 	}
 
-	for k, bin := range bd {
-		bd[k].Collected = IsBinCollected(bin, wsAnchor)
+	binData := generateBinData()
+
+	for k, bin := range binData {
+		binData[k].Collected = IsBinCollected(bin, wsAnchor)
 	}
 
-	return bd
+	return binData
 }
 
 // NextCollectionDate uses the const COLLECTIONDAY which is a time.Weekday.
@@ -110,9 +154,7 @@ func AnchorWeekYear() (awYear int, awWeek int, err error) {
 //
 // It returns 0, error if the weeks since the anchor are less than 0
 func WeeksSinceAnchor(cYear, cWeek, aYear, aWeek int) (wsAnchor int, err error) {
-
 	// Add remaining weeks in anchor year
-	wsAnchor += WeeksInYear(aYear) - aWeek
 
 	// Add weeks so far in current year
 	wsAnchor += cWeek
@@ -132,7 +174,7 @@ func WeeksSinceAnchor(cYear, cWeek, aYear, aWeek int) (wsAnchor int, err error) 
 
 // IsBinCollected returns whether a bin is collected as a bool based on the given
 // collection frequency and the number of weeks since the anchor week
-func IsBinCollected(bin binData, wsAnchor int) bool {
+func IsBinCollected(bin BinData, wsAnchor int) bool {
 	return wsAnchor%bin.Freq == 0
 }
 
