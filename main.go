@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"os"
 	"slices"
 	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
 
 	"binjuice/bin"
 	"binjuice/notification"
@@ -17,14 +19,45 @@ import (
 
 var notifyHours = []int{8}
 
-func main() {
+var daysOfWeek = map[string]time.Weekday{
+	"Sunday":    time.Sunday,
+	"Monday":    time.Monday,
+	"Tuesday":   time.Tuesday,
+	"Wednesday": time.Wednesday,
+	"Thursday":  time.Thursday,
+	"Friday":    time.Friday,
+	"Saturday":  time.Saturday,
+}
 
+func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("Environment file not found")
+	}
 	app := initialiseApp()
 	go notificationLooper()
 	log.Fatal(app.Listen(":8000"))
 }
 
+func parseWeekday(v string) (time.Weekday, error) {
+	if d, ok := daysOfWeek[v]; ok {
+		return d, nil
+	}
+
+	return time.Sunday, fmt.Errorf("invalid weekday '%s'", v)
+}
+
 func initialiseApp() *fiber.App {
+	customCollectionDay := os.Getenv("COLLECTION_DAY")
+	if customCollectionDay != "" {
+		collectionDay, err := parseWeekday(customCollectionDay)
+
+		switch err == nil {
+		case true:
+			bin.COLLECTIONDAY = collectionDay
+		default:
+			bin.COLLECTIONDAY = time.Thursday
+		}
+	}
 	engine := html.New("./views", ".html")
 	app := fiber.New(fiber.Config{Views: engine})
 
